@@ -9,7 +9,7 @@ CYLS	EQU		10				; どこまで読み込むか
 
 		JMP		entry
 		DB		0x90
-		DB		"HARIBOTE"		; ブートセクタの名前を自由に書いてよい（8バイト）
+		DB		"EMU84   "		; ブートセクタの名前を自由に書いてよい（8バイトにしなければいけない）
 		DW		512				; 1セクタの大きさ（512にしなければいけない）
 		DB		1				; クラスタの大きさ（1セクタにしなければいけない）
 		DW		1				; FATがどこから始まるか（普通は1セクタ目からにする）
@@ -24,7 +24,7 @@ CYLS	EQU		10				; どこまで読み込むか
 		DD		2880			; このドライブ大きさをもう一度書く
 		DB		0,0,0x29		; よくわからないけどこの値にしておくといいらしい
 		DD		0xffffffff		; たぶんボリュームシリアル番号
-		DB		"HARIBOTEOS "	; ディスクの名前（11バイト）
+		DB		"EMU84      "	; ディスクの名前（11バイト）
 		DB		"FAT12   "		; フォーマットの名前（8バイト）
 		RESB	18				; とりあえず18バイトあけておく
 
@@ -75,11 +75,9 @@ next:
 		CMP		CH,CYLS
 		JB		readloop		; CH < CYLS だったらreadloopへ
 
-; 読み終わったけどとりあえずやることないので寝る
-
-fin:
-		HLT						; 何かあるまでCPUを停止させる
-		JMP		fin				; 無限ループ
+; 読み終わったのでharibote.sysを実行
+		MOV		[0x0ff0],CH
+		JMP		0xc200
 
 error:
 		MOV		SI,msg
@@ -92,6 +90,9 @@ putloop:
 		MOV		BX,15			; カラーコード
 		INT		0x10			; ビデオBIOS呼び出し
 		JMP		putloop
+fin:
+		HLT						; 何かあるまでCPUを停止させる
+		JMP		fin				; 無限ループ
 msg:
 		DB		0x0a, 0x0a		; 改行を2つ
 		DB		"load error"
