@@ -142,6 +142,7 @@ int memman_free(struct MEMMAN *man, unsigned int addr, unsigned int size);
 unsigned int memman_alloc_4k(struct MEMMAN *man, unsigned int size);
 int memman_free_4k(struct MEMMAN *man, unsigned int addr, unsigned int size);
 
+/* sheet.c */
 #define MAX_SHEETS 256
 struct SHEET{
 	unsigned char *buf;

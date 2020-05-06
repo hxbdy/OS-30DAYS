@@ -64,13 +64,6 @@ void timer_settime(struct TIMER *timer, unsigned int timeout){
         io_store_eflags(e);
         return;
     }
-    if(timer->timeout <= t->timeout){
-        timerctl.t0 = timer;
-        timer->next = t;
-        timerctl.next = timer->timeout;
-        io_store_eflags(e);
-        return;
-    }
 	/* ‚Ç‚±‚É“ü‚ê‚ê‚Î‚¢‚¢‚©‚ð’T‚· */
 	for (;;) {
         s = t;

@@ -9,10 +9,9 @@ void HariMain(void){
 
     struct BOOTINFO *binfo = (struct BOOTINFO *) ADR_BOOTINFO;
 	struct FIFO32 fifo;
+	char s[40];
 	int fifobuf[128];
-	char s[40],keybuf[32],mousebuf[128], timerbuf[8], timerbuf2[8], timerbuf3[8];
 	struct TIMER *timer, *timer2, *timer3;
-	
     int mx, my, i, count = 0;
     unsigned int memtotal;
     struct MOUSE_DEC mdec;

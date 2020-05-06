@@ -96,25 +96,25 @@
     96 000000E1 A1 [00000008]                   	MOV	EAX,DWORD [_timerctl+8]
     97 000000E6 8B 53 04                        	MOV	EDX,DWORD [4+EBX]
     98 000000E9 3B 50 04                        	CMP	EDX,DWORD [4+EAX]
-    99 000000EC 76 18                           	JBE	L29
-   100 000000EE                                 L24:
+    99 000000EC 76 18                           	JBE	L28
+   100 000000EE                                 L23:
    101 000000EE 89 C1                           	MOV	ECX,EAX
    102 000000F0 8B 00                           	MOV	EAX,DWORD [EAX]
    103 000000F2 3B 50 04                        	CMP	EDX,DWORD [4+EAX]
-   104 000000F5 77 F7                           	JA	L24
+   104 000000F5 77 F7                           	JA	L23
    105 000000F7 89 19                           	MOV	DWORD [ECX],EBX
    106 000000F9 89 03                           	MOV	DWORD [EBX],EAX
-   107 000000FB                                 L28:
+   107 000000FB                                 L27:
    108 000000FB 89 75 08                        	MOV	DWORD [8+EBP],ESI
    109 000000FE 5B                              	POP	EBX
    110 000000FF 5E                              	POP	ESI
    111 00000100 5D                              	POP	EBP
    112 00000101 E9 [00000000]                   	JMP	_io_store_eflags
-   113 00000106                                 L29:
+   113 00000106                                 L28:
    114 00000106 89 1D [00000008]                	MOV	DWORD [_timerctl+8],EBX
    115 0000010C 89 15 [00000004]                	MOV	DWORD [_timerctl+4],EDX
    116 00000112 89 03                           	MOV	DWORD [EBX],EAX
-   117 00000114 EB E5                           	JMP	L28
+   117 00000114 EB E5                           	JMP	L27
    118 00000116                                 	GLOBAL	_inthandler20
    119 00000116                                 _inthandler20:
    120 00000116 55                              	PUSH	EBP
@@ -129,12 +129,12 @@
    129 0000012A 40                              	INC	EAX
    130 0000012B A3 [00000000]                   	MOV	DWORD [_timerctl],EAX
    131 00000130 39 05 [00000004]                	CMP	DWORD [_timerctl+4],EAX
-   132 00000136 77 34                           	JA	L30
+   132 00000136 77 34                           	JA	L29
    133 00000138 8B 1D [00000008]                	MOV	EBX,DWORD [_timerctl+8]
-   134 0000013E                                 L32:
+   134 0000013E                                 L31:
    135 0000013E 8B 43 04                        	MOV	EAX,DWORD [4+EBX]
    136 00000141 3B 05 [00000000]                	CMP	EAX,DWORD [_timerctl]
-   137 00000147 77 18                           	JA	L33
+   137 00000147 77 18                           	JA	L32
    138 00000149 C7 43 08 00000001               	MOV	DWORD [8+EBX],1
    139 00000150 FF 73 10                        	PUSH	DWORD [16+EBX]
    140 00000153 FF 73 0C                        	PUSH	DWORD [12+EBX]
@@ -142,11 +142,11 @@
    142 0000015B 58                              	POP	EAX
    143 0000015C 8B 1B                           	MOV	EBX,DWORD [EBX]
    144 0000015E 5A                              	POP	EDX
-   145 0000015F EB DD                           	JMP	L32
-   146 00000161                                 L33:
+   145 0000015F EB DD                           	JMP	L31
+   146 00000161                                 L32:
    147 00000161 89 1D [00000008]                	MOV	DWORD [_timerctl+8],EBX
    148 00000167 A3 [00000004]                   	MOV	DWORD [_timerctl+4],EAX
-   149 0000016C                                 L30:
+   149 0000016C                                 L29:
    150 0000016C 8B 5D FC                        	MOV	EBX,DWORD [-4+EBP]
    151 0000016F C9                              	LEAVE
    152 00000170 C3                              	RET
