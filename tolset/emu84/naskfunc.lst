@@ -13,7 +13,7 @@
     13 00000000                                 	GLOBAL  _asm_inthandler20, _asm_inthandler21
     14 00000000                                     GLOBAL	_asm_inthandler27, _asm_inthandler2c
     15 00000000                                 	GLOBAL	_memtest_sub
-    16 00000000                                 	GLOBAL  _taskswitch3, _taskswitch4
+    16 00000000                                 	GLOBAL  _farjmp
     17 00000000                                 	EXTERN  _inthandler20, _inthandler21
     18 00000000                                 	EXTERN	_inthandler27, _inthandler2c
     19 00000000                                 
@@ -203,10 +203,6 @@
    203 0000011C 5F                              		POP		EDI
    204 0000011D C3                              		RET
    205 0000011E                                 
-   206 0000011E                                 _taskswitch3:	; void taskswitch3(void);
-   207 0000011E EA 00000000 0018                		JMP		3*8:0
-   208 00000125 C3                              		RET
-   209 00000126                                 
-   210 00000126                                 _taskswitch4:	; void taskswitch4(void);
-   211 00000126 EA 00000000 0020                		JMP		4*8:0
-   212 0000012D C3                              		RET
+   206 0000011E                                 _farjmp:		; void farjmp(int eip, int cs);
+   207 0000011E FF 6C 24 04                     		JMP		FAR	[ESP+4]				; eip, cs
+   208 00000122 C3                              		RET
