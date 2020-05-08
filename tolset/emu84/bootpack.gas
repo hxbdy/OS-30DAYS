@@ -362,6 +362,7 @@ _HariMain:
 	pushl	$65536
 	pushl	$3932160
 	call	_memman_alloc_4k
+	movl	-1128(%ebp), %ebx
 	addl	$65536, %eax
 	movl	$_task_b_main, -1068(%ebp)
 	movl	$514, -1064(%ebp)
@@ -379,6 +380,7 @@ _HariMain:
 	movl	$8, -1016(%ebp)
 	movl	$8, -1012(%ebp)
 	movl	$8, -1008(%ebp)
+	movl	%ebx, 4076
 L31:
 	addl	$28, %esp
 L2:
@@ -421,7 +423,7 @@ L33:
 	pushl	$50
 	pushl	-1104(%ebp)
 	call	_timer_settime
-	movl	-1136(%ebp), %edx
+	movl	-1136(%ebp), %ebx
 	movl	-1116(%ebp), %eax
 	pushl	$43
 	addl	$7, %eax
@@ -429,8 +431,8 @@ L33:
 	pushl	$28
 	pushl	-1116(%ebp)
 	pushl	-1120(%ebp)
-	pushl	4(%edx)
-	pushl	(%edx)
+	pushl	4(%ebx)
+	pushl	(%ebx)
 	call	_boxfill8
 	movl	-1116(%ebp), %eax
 	addl	$36, %esp
@@ -439,7 +441,7 @@ L33:
 	pushl	%eax
 	pushl	$28
 	pushl	-1116(%ebp)
-	pushl	-1136(%ebp)
+	pushl	%ebx
 	call	_sheet_refresh
 	addl	$20, %esp
 	jmp	L2
@@ -506,10 +508,10 @@ L17:
 	pushl	$32
 	pushl	-1128(%ebp)
 	call	_putfonts8_asc_sht
-	movl	-616(%ebp), %eax
+	movl	-616(%ebp), %edx
 	addl	-612(%ebp), %edi
 	addl	$28, %esp
-	addl	%eax, -1112(%ebp)
+	addl	%edx, -1112(%ebp)
 	js	L40
 L18:
 	testl	%edi, %edi
@@ -604,13 +606,13 @@ L11:
 	movl	-1116(%ebp), %eax
 	pushl	$43
 	addl	$7, %eax
-	movl	-1136(%ebp), %ebx
 	pushl	%eax
+	movl	-1136(%ebp), %eax
 	pushl	$28
 	pushl	-1116(%ebp)
 	pushl	-1120(%ebp)
-	pushl	4(%ebx)
-	pushl	(%ebx)
+	pushl	4(%eax)
+	pushl	(%eax)
 	call	_boxfill8
 	movl	-1116(%ebp), %eax
 	pushl	$44
@@ -618,7 +620,7 @@ L11:
 	pushl	%eax
 	pushl	$28
 	pushl	-1116(%ebp)
-	pushl	%ebx
+	pushl	-1136(%ebp)
 	call	_sheet_refresh
 	addl	$48, %esp
 	jmp	L2
@@ -1011,17 +1013,23 @@ _make_textbox8:
 	popl	%edi
 	popl	%ebp
 	ret
+	.data
+LC9:
+	.ascii "%10d\0"
+	.text
 	.balign 2
 .globl _task_b_main
 	.def	_task_b_main;	.scl	2;	.type	32;	.endef
 _task_b_main:
 	pushl	%ebp
 	movl	%esp, %ebp
+	pushl	%edi
 	pushl	%esi
+	xorl	%edi, %edi
 	pushl	%ebx
-	subl	$544, %esp
-	leal	-552(%ebp), %eax
-	leal	-40(%ebp), %ebx
+	leal	-556(%ebp), %eax
+	subl	$564, %esp
+	leal	-44(%ebp), %ebx
 	pushl	%eax
 	pushl	$128
 	pushl	%ebx
@@ -1036,8 +1044,25 @@ _task_b_main:
 	pushl	%esi
 	call	_timer_settime
 	addl	$32, %esp
+	movl	4076, %eax
+	movl	%eax, -576(%ebp)
 L69:
-	leal	-40(%ebp), %ebx
+	incl	%edi
+	leal	-572(%ebp), %ebx
+	pushl	%edi
+	pushl	$LC9
+	pushl	%ebx
+	call	_sprintf
+	pushl	$10
+	pushl	%ebx
+	leal	-44(%ebp), %ebx
+	pushl	$14
+	pushl	$7
+	pushl	$144
+	pushl	$0
+	pushl	-576(%ebp)
+	call	_putfonts8_asc_sht
+	addl	$40, %esp
 	call	_io_cli
 	pushl	%ebx
 	call	_fifo32_status
@@ -1061,10 +1086,8 @@ L69:
 	jmp	L69
 L75:
 	call	_io_sti
-	call	_io_hlt
 	jmp	L69
 	.def	_farjmp;	.scl	2;	.type	32;	.endef
-	.def	_io_hlt;	.scl	2;	.type	32;	.endef
 	.def	_putfonts8_asc;	.scl	2;	.type	32;	.endef
 	.def	_mouse_decode;	.scl	2;	.type	32;	.endef
 	.def	_sheet_refresh;	.scl	2;	.type	32;	.endef
