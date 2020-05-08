@@ -363,7 +363,7 @@ _HariMain:
 	pushl	$3932160
 	call	_memman_alloc_4k
 	movl	-1128(%ebp), %ebx
-	addl	$65536, %eax
+	addl	$65528, %eax
 	movl	$_task_b_main, -1068(%ebp)
 	movl	$514, -1064(%ebp)
 	movl	$0, -1060(%ebp)
@@ -380,7 +380,7 @@ _HariMain:
 	movl	$8, -1016(%ebp)
 	movl	$8, -1012(%ebp)
 	movl	$8, -1008(%ebp)
-	movl	%ebx, 4076
+	movl	%ebx, 4(%eax)
 L31:
 	addl	$28, %esp
 L2:
@@ -1015,7 +1015,7 @@ _make_textbox8:
 	ret
 	.data
 LC9:
-	.ascii "%10d\0"
+	.ascii "%11d\0"
 	.text
 	.balign 2
 .globl _task_b_main
@@ -1025,66 +1025,83 @@ _task_b_main:
 	movl	%esp, %ebp
 	pushl	%edi
 	pushl	%esi
-	xorl	%edi, %edi
 	pushl	%ebx
 	leal	-556(%ebp), %eax
 	subl	$564, %esp
 	leal	-44(%ebp), %ebx
+	movl	$0, -576(%ebp)
 	pushl	%eax
 	pushl	$128
 	pushl	%ebx
 	call	_fifo32_init
 	call	_timer_alloc
-	pushl	$1
+	pushl	$2
 	pushl	%ebx
-	movl	%eax, %esi
+	movl	%eax, %edi
 	pushl	%eax
 	call	_timer_init
 	pushl	$2
-	pushl	%esi
+	pushl	%edi
 	call	_timer_settime
 	addl	$32, %esp
-	movl	4076, %eax
-	movl	%eax, -576(%ebp)
+	call	_timer_alloc
+	pushl	$1
+	movl	%eax, %esi
+	pushl	%ebx
+	pushl	%eax
+	call	_timer_init
+	pushl	$1
+	pushl	%esi
+	call	_timer_settime
+	addl	$20, %esp
 L69:
-	incl	%edi
-	leal	-572(%ebp), %ebx
-	pushl	%edi
-	pushl	$LC9
-	pushl	%ebx
-	call	_sprintf
-	pushl	$10
-	pushl	%ebx
 	leal	-44(%ebp), %ebx
-	pushl	$14
-	pushl	$7
-	pushl	$144
-	pushl	$0
-	pushl	-576(%ebp)
-	call	_putfonts8_asc_sht
-	addl	$40, %esp
+	incl	-576(%ebp)
 	call	_io_cli
 	pushl	%ebx
 	call	_fifo32_status
 	popl	%edx
 	testl	%eax, %eax
-	je	L75
+	je	L77
 	pushl	%ebx
 	call	_fifo32_get
 	movl	%eax, %ebx
 	call	_io_sti
-	popl	%ecx
-	decl	%ebx
+	popl	%eax
+	cmpl	$1, %ebx
+	je	L78
+	cmpl	$2, %ebx
 	jne	L69
 	pushl	$24
 	pushl	$0
 	call	_farjmp
 	pushl	$2
-	pushl	%esi
+	pushl	%edi
 	call	_timer_settime
 	addl	$16, %esp
 	jmp	L69
-L75:
+L78:
+	pushl	-576(%ebp)
+	pushl	$LC9
+	leal	-572(%ebp), %ebx
+	pushl	%ebx
+	call	_sprintf
+	pushl	$10
+	pushl	%ebx
+	pushl	$14
+	pushl	$7
+	pushl	$144
+	pushl	$0
+	pushl	8(%ebp)
+	call	_putfonts8_asc_sht
+	addl	$40, %esp
+	pushl	$1
+	pushl	%esi
+	call	_timer_settime
+	popl	%ecx
+	popl	%ebx
+	jmp	L69
+L77:
 	call	_io_sti
 	jmp	L69
 	.def	_farjmp;	.scl	2;	.type	32;	.endef
