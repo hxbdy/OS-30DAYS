@@ -168,6 +168,10 @@ _HariMain:
 	addl	$32, %esp
 	movl	%eax, -940(%ebp)
 	movl	%eax, -20(%ebp)
+	pushl	$2
+	pushl	$1
+	pushl	%eax
+	call	_task_run
 	pushl	%edi
 	call	_sheet_alloc
 	movswl	4086,%edx
@@ -186,7 +190,7 @@ _HariMain:
 	pushl	%ebx
 	pushl	-928(%ebp)
 	call	_sheet_setbuf
-	addl	$32, %esp
+	addl	$44, %esp
 	movswl	4086,%eax
 	pushl	%eax
 	movswl	4084,%eax
@@ -229,23 +233,26 @@ L6:
 	movl	%eax, -908(%ebp,%esi,4)
 	call	_memman_alloc_4k
 	addl	$65528, %eax
-	movl	%eax, 64(%ebx)
+	movl	%eax, 72(%ebx)
 	movl	-892(%ebp,%esi,4), %ebx
 	movl	-908(%ebp,%esi,4), %eax
-	incl	%esi
-	movl	64(%eax), %ecx
-	movl	$_task_b_main, 40(%eax)
-	movl	$8, 80(%eax)
-	movl	$16, 84(%eax)
+	movl	72(%eax), %ecx
+	movl	$_task_b_main, 48(%eax)
 	movl	$8, 88(%eax)
-	movl	$8, 92(%eax)
+	movl	$16, 92(%eax)
 	movl	$8, 96(%eax)
 	movl	$8, 100(%eax)
+	movl	$8, 104(%eax)
+	movl	$8, 108(%eax)
 	movl	%ebx, 4(%ecx)
+	leal	1(%esi), %ebx
+	pushl	%ebx
+	movl	%ebx, %esi
+	pushl	$2
 	pushl	%eax
 	call	_task_run
-	addl	$12, %esp
-	cmpl	$2, %esi
+	addl	$20, %esp
+	cmpl	$2, %ebx
 	jle	L6
 	pushl	%edi
 	call	_sheet_alloc
@@ -1098,7 +1105,6 @@ L74:
 	.def	_timer_init;	.scl	2;	.type	32;	.endef
 	.def	_timer_alloc;	.scl	2;	.type	32;	.endef
 	.def	_make_textbox8;	.scl	2;	.type	32;	.endef
-	.def	_task_run;	.scl	2;	.type	32;	.endef
 	.def	_task_b_main;	.scl	2;	.type	32;	.endef
 	.def	_task_alloc;	.scl	2;	.type	32;	.endef
 	.def	_make_window8;	.scl	2;	.type	32;	.endef
@@ -1107,6 +1113,7 @@ L74:
 	.def	_sheet_setbuf;	.scl	2;	.type	32;	.endef
 	.def	_memman_alloc_4k;	.scl	2;	.type	32;	.endef
 	.def	_sheet_alloc;	.scl	2;	.type	32;	.endef
+	.def	_task_run;	.scl	2;	.type	32;	.endef
 	.def	_task_init;	.scl	2;	.type	32;	.endef
 	.def	_shtctl_init;	.scl	2;	.type	32;	.endef
 	.def	_init_palette;	.scl	2;	.type	32;	.endef

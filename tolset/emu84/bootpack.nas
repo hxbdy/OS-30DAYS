@@ -17,13 +17,13 @@
 	EXTERN	_init_palette
 	EXTERN	_shtctl_init
 	EXTERN	_task_init
+	EXTERN	_task_run
 	EXTERN	_sheet_alloc
 	EXTERN	_memman_alloc_4k
 	EXTERN	_sheet_setbuf
 	EXTERN	_init_screen8
 	EXTERN	_sprintf
 	EXTERN	_task_alloc
-	EXTERN	_task_run
 	EXTERN	_timer_alloc
 	EXTERN	_timer_init
 	EXTERN	_timer_settime
@@ -208,6 +208,10 @@ _HariMain:
 	ADD	ESP,32
 	MOV	DWORD [-940+EBP],EAX
 	MOV	DWORD [-20+EBP],EAX
+	PUSH	2
+	PUSH	1
+	PUSH	EAX
+	CALL	_task_run
 	PUSH	EDI
 	CALL	_sheet_alloc
 	MOVSX	EDX,WORD [4086]
@@ -226,7 +230,7 @@ _HariMain:
 	PUSH	EBX
 	PUSH	DWORD [-928+EBP]
 	CALL	_sheet_setbuf
-	ADD	ESP,32
+	ADD	ESP,44
 	MOVSX	EAX,WORD [4086]
 	PUSH	EAX
 	MOVSX	EAX,WORD [4084]
@@ -269,23 +273,26 @@ L6:
 	MOV	DWORD [-908+EBP+ESI*4],EAX
 	CALL	_memman_alloc_4k
 	ADD	EAX,65528
-	MOV	DWORD [64+EBX],EAX
+	MOV	DWORD [72+EBX],EAX
 	MOV	EBX,DWORD [-892+EBP+ESI*4]
 	MOV	EAX,DWORD [-908+EBP+ESI*4]
-	INC	ESI
-	MOV	ECX,DWORD [64+EAX]
-	MOV	DWORD [40+EAX],_task_b_main
-	MOV	DWORD [80+EAX],8
-	MOV	DWORD [84+EAX],16
+	MOV	ECX,DWORD [72+EAX]
+	MOV	DWORD [48+EAX],_task_b_main
 	MOV	DWORD [88+EAX],8
-	MOV	DWORD [92+EAX],8
+	MOV	DWORD [92+EAX],16
 	MOV	DWORD [96+EAX],8
 	MOV	DWORD [100+EAX],8
+	MOV	DWORD [104+EAX],8
+	MOV	DWORD [108+EAX],8
 	MOV	DWORD [4+ECX],EBX
+	LEA	EBX,DWORD [1+ESI]
+	PUSH	EBX
+	MOV	ESI,EBX
+	PUSH	2
 	PUSH	EAX
 	CALL	_task_run
-	ADD	ESP,12
-	CMP	ESI,2
+	ADD	ESP,20
+	CMP	EBX,2
 	JLE	L6
 	PUSH	EDI
 	CALL	_sheet_alloc
