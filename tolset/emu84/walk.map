@@ -1,4 +1,4 @@
-text size :    657(0x00291)
+text size :    669(0x0029D)
 data size :      7(0x00007)
 bss  size :      0(0x00000)
 
@@ -23,8 +23,9 @@ bss  size :      0(0x00000)
 0x0000027A : _api_inittimer
 0x0000028C : _api_settimer
 0x0000029E : _api_freetimer
-0x000002AC : (.text)
-0x000002AC : _HariStartup
+0x000002AC : _api_beep
+0x000002B8 : (.text)
+0x000002B8 : _HariStartup
 0x00000000 : (.data)
 0x00000000 : (.data)
 0x00000400 : (.data)
